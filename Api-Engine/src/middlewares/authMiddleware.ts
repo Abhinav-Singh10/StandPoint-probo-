@@ -1,6 +1,13 @@
 import { NextFunction, Request, Response } from "express";
-import { verify } from "jsonwebtoken";
+import { verify,JwtPayload } from "jsonwebtoken";
 import { JWT_SECRET } from "../server";
+
+// interface authRequest extends Request {
+//     user?: string | JwtPayload | undefined
+// }
+interface decodedToken extends JwtPayload {
+    userId: number
+}
 
 export function authMiddleware(req:Request,res:Response,next:NextFunction){
     const token = req.cookies.authToken;
@@ -12,9 +19,10 @@ export function authMiddleware(req:Request,res:Response,next:NextFunction){
     }
 
     try {
-        const decoded = verify(token,JWT_SECRET)as {[key:string]: any} ;
-        (req as any).user=decoded;
+        const decoded = verify(token,JWT_SECRET) as decodedToken;
+        req.userId=decoded.userId;
         console.log(`Decoded from authMiddleware:`,decoded);
+        console.log(`Req user content:`,req.userId);
         next();
     } catch (error) {
         res.status(401).json({ message: 'Invalid or expired token' });

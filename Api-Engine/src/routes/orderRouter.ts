@@ -14,21 +14,16 @@ orderRouter.post("/buy",authMiddleware,async(req:Request,res:Response)=>{
 
     try {
         await requestQueue.lpush('/order/buy',JSON.stringify(order));
-    } catch (error) {
-        console.error(error);
-        res.status(400).send("Failed to process order. Please try again later")
-    }
 
-    const responsePromise:Promise<string>= getResponseFrmEngine(pubsubSubscribe,uniqueId);
+        const responsePromise:Promise<string>= getResponseFrmEngine(pubsubSubscribe,uniqueId);
 
-    try {
         const response = await responsePromise;
-        pubsubSubscribe.unsubscribe(uniqueId.toString())
         res.status(200).send(response)
     } catch (error) {
-        res.status(500).json({
-            "Error": error
-        })
+        res.status(500).send(
+            "Failed to process the buy order. Please try again later")
+    } finally{
+        pubsubSubscribe.unsubscribe(uniqueId.toString())
     }
 })
 
@@ -39,22 +34,17 @@ orderRouter.post("/sell",authMiddleware,async(req:Request,res:Response)=>{
     order["uniqueId"]=uniqueId;
 
     try {
-        await requestQueue.lpush('/order/buy',JSON.stringify(order));
-    } catch (error) {
-        console.error(error);
-        res.status(400).send("Failed to process order. Please try again later")
-    }
+        await requestQueue.lpush('/order/sell',JSON.stringify(order));
 
-    const responsePromise:Promise<string>= getResponseFrmEngine(pubsubSubscribe,uniqueId);
+        const responsePromise:Promise<string>= getResponseFrmEngine(pubsubSubscribe,uniqueId);
 
-    try {
         const response = await responsePromise;
-        pubsubSubscribe.unsubscribe(uniqueId.toString())
         res.status(200).send(response)
     } catch (error) {
-        res.status(500).json({
-            "Error": error
-        })
+        res.status(500).send(
+            "Failed to process the sell order. Please try again later")
+    } finally{
+        pubsubSubscribe.unsubscribe(uniqueId.toString())
     }
 })
 

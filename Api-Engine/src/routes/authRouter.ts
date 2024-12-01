@@ -67,7 +67,7 @@ authRouter.post("/login",async(req:Request,res:Response)=>{
     }
     
     const token = jwt.sign({
-        userId: user.email
+        userId: user.id
     },JWT_SECRET,{expiresIn: '1h'})
 
     res.cookie('authToken', token,{
