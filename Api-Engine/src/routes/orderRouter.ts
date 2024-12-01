@@ -34,8 +34,8 @@ orderRouter.post("/buy",authMiddleware,async(req:Request,res:Response)=>{
 
 orderRouter.post("/sell",authMiddleware,async(req:Request,res:Response)=>{
     const order:OrderPayload = req.body;
-    const uniqueId=idGen();
-    // const uniqueId=999;
+    // const uniqueId=idGen();
+    const uniqueId=999;
     order["uniqueId"]=uniqueId;
 
     try {
