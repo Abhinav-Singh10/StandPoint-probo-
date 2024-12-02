@@ -44,7 +44,7 @@ balancesRouter.get("/stock",authMiddleware,async(req,res)=>{
 balancesRouter.get("/inr/:userId",authMiddleware,async(req,res)=>{
     const uniqueId=idGen();
     const payload=  {
-        userId: req.user,
+        userId: req.userId,
         uniqueId: uniqueId
     }
 
@@ -66,7 +66,7 @@ balancesRouter.get("/inr/:userId",authMiddleware,async(req,res)=>{
 balancesRouter.get("/stock/:userId",authMiddleware,async(req,res)=>{
     const uniqueId=idGen();
     const payload=  {
-        userId: req.user,
+        userId: req.userId,
         uniqueId: uniqueId
     }
 
