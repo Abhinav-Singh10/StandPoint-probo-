@@ -16,8 +16,8 @@ balancesRouter.get("/inr",authMiddleware,async(req,res)=>{
         const response = await responsePromise;
 
         res.status(200).send(response)
-    } catch (error) {
-        res.status(500).send("Failed to fetch balances. Please try again later")
+    } catch (error: any) { // Ensure TypeScript recognizes the error type
+        res.status(500).send(`Failed to fetch balances: ${error.message || 'Unknown error occurred.'}`);
     } finally{
         pubsubSubscribe.unsubscribe(uniqueId.toString())
     }
@@ -34,8 +34,8 @@ balancesRouter.get("/stock",authMiddleware,async(req,res)=>{
         const response = await responsePromise;
 
         res.status(200).send(response)
-    } catch (error) {
-        res.status(500).send("Failed to fetch stock balances. Please try again later")
+    } catch (error: any) { // Ensure TypeScript recognizes the error type
+        res.status(500).send(`Failed to fetch stock balances: ${error.message || 'Unknown error occurred.'}`);
     } finally{
         pubsubSubscribe.unsubscribe(uniqueId.toString())
     }
@@ -44,7 +44,7 @@ balancesRouter.get("/stock",authMiddleware,async(req,res)=>{
 balancesRouter.get("/inr/:userId",authMiddleware,async(req,res)=>{
     const uniqueId=idGen();
     const payload=  {
-        userId: req.userId,
+        userId: req.params.userId,
         uniqueId: uniqueId
     }
 
@@ -56,8 +56,8 @@ balancesRouter.get("/inr/:userId",authMiddleware,async(req,res)=>{
         const response = await responsePromise;
 
         res.status(200).send(response)
-    } catch (error) {
-        res.status(500).send("Failed to fetch inr balances. Please try again later")
+    } catch (error: any) { // Ensure TypeScript recognizes the error type
+        res.status(500).send(`Failed to fetch inr balances: ${error.message || 'Unknown error occurred.'}`);
     } finally{
         pubsubSubscribe.unsubscribe(uniqueId.toString())
     }
@@ -66,20 +66,20 @@ balancesRouter.get("/inr/:userId",authMiddleware,async(req,res)=>{
 balancesRouter.get("/stock/:userId",authMiddleware,async(req,res)=>{
     const uniqueId=idGen();
     const payload=  {
-        userId: req.userId,
+        userId: req.params.userId,
         uniqueId: uniqueId
     }
 
     try {
-        await requestQueue.lpush("/balances/inr/:userId",JSON.stringify(payload));
+        await requestQueue.lpush("/balances/stock/:userId",JSON.stringify(payload));
 
         const responsePromise:Promise<string>= getResponseFrmEngine(pubsubSubscribe,uniqueId);
 
         const response = await responsePromise;
 
         res.status(200).send(response)
-    } catch (error) {
-        res.status(500).send("Failed to fetch stock balances. Please try again later")
+    } catch (error: any) { // Ensure TypeScript recognizes the error type
+        res.status(500).send(`Failed to fetch stock: ${error.message || 'Unknown error occurred.'}`);
     } finally{
         pubsubSubscribe.unsubscribe(uniqueId.toString())
     }

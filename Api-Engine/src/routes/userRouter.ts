@@ -8,7 +8,7 @@ const userRouter= Router();
 userRouter.post("/create/:userId",authMiddleware,async (req,res)=>{
     const uniqueId= idGen();
     const payload=  {
-        userId: req.userId,
+        userId: req.params.userId,
         uniqueId: uniqueId
     }
 
@@ -19,8 +19,8 @@ userRouter.post("/create/:userId",authMiddleware,async (req,res)=>{
 
         const response = await responsePromise;
         res.status(200).send(response)
-    } catch (error) {
-        res.status(500).send("Failed to create userID. Please try again later")
+    } catch (error: any) { // Ensure TypeScript recognizes the error type
+        res.status(500).send(`Failed to create userID: ${error.message || 'Unknown error occurred.'}`);
     } finally{
         pubsubSubscribe.unsubscribe(uniqueId.toString())
     }

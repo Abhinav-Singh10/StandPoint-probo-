@@ -12,6 +12,7 @@ export const MintPayload =z.object({
     userId: z.string(),
     stockSymbol:z.string(),
     quantity:z.number(),
+    price:z.number(),
 })
 
 export const OrampPayload =z.object({

@@ -1,0 +1,20 @@
+{
+  "name": "engine",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "npx nodemon"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/ioredis": "^4.28.10",
+    "nodemon": "^3.1.7"
+  },
+  "dependencies": {
+    "ioredis": "^5.4.1"
+  }
+}

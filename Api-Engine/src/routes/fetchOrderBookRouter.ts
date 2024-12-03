@@ -16,9 +16,9 @@ fetchOrderBookRouter.get("/",async (req,res)=>{
         const response = await responsePromise;
 
         res.status(200).send(response)
-    } catch (error) {
-        res.status(500).send("Failed to fetch orderbook. Please try again later")
-    }finally{
+    } catch (error: any) { // Ensure TypeScript recognizes the error type
+        res.status(500).send(`Failed to fetch Orderbook: ${error.message || 'Unknown error occurred.'}`);
+    } finally{
         pubsubSubscribe.unsubscribe(uniqueId.toString())
     }
 })
@@ -31,16 +31,16 @@ fetchOrderBookRouter.get("/:stockSymbol",async(req,res)=>{
         stockSymbol: stockSymbol
     }
     try {
-        await requestQueue.lpush("/orderbook",JSON.stringify(uniqueId));
+        await requestQueue.lpush("/orderbook/:stockSymbol",JSON.stringify(payload));
 
         const responsePromise:Promise<string>= getResponseFrmEngine(pubsubSubscribe,uniqueId);
 
         const response = await responsePromise;
 
         res.status(200).send(response)
-    } catch (error) {
-        res.status(500).send("Failed to fetch orderbook. Please try again later")
-    }finally{
+    } catch (error: any) { // Ensure TypeScript recognizes the error type
+        res.status(500).send(`Failed to fetch orderbook: ${error.message || 'Unknown error occurred.'}`);
+    } finally{
         pubsubSubscribe.unsubscribe(uniqueId.toString())
     }
 })

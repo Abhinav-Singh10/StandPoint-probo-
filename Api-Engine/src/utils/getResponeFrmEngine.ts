@@ -21,8 +21,17 @@ export default function getResponseFrmEngine(pubsub:Redis, uniqueId:number):Prom
                 console.log(typeof message);
                 
                 const data = JSON.parse(message);
+                console.log(data.error);
+                if (data.error) {
+                    console.log("---------------Error BLOCK REACHED--------------------");
+                    clearTimeout(timer);
+                    reject(new Error (data.error))
+                }else{
+                console.log("xxxxxxxxxxxxxxxxxxxSUCCESS BLOCK REACHEDxxxxxxxxxxxxxxxxxxxxx");
+                
                 clearTimeout(timer);
                 resolve(data);
+            }
             }
         })
     })

@@ -26,9 +26,8 @@ tradeRouter.post("/mint",authMiddleware,async(req,res)=>{
 
         const response = await responsePromise;
         res.status(200).send(response)
-    } catch (error) {
-        res.status(500).send(
-            "Failed to process the buy order. Please try again later")
+    } catch (error: any) { // Ensure TypeScript recognizes the error type
+        res.status(500).send(`Failed to generate mints for stocks: ${error.message || 'Unknown error occurred.'}`);
     } finally{
         pubsubSubscribe.unsubscribe(uniqueId.toString())
     }

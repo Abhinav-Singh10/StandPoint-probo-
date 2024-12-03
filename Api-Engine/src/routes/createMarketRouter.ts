@@ -20,9 +20,9 @@ createMarketRouter.post("/create/:stockSymbol",authMiddleware,async(req,res)=>{
 
         const response = await responsePromise;
         res.status(200).send(response)
-    } catch (error) {
-        res.status(500).send("Failed to create stockSymbol. Please try again later")
-    }finally{
+    } catch (error: any) { // Ensure TypeScript recognizes the error type
+        res.status(500).send(`Failed to create Market: ${error.message || 'Unknown error occurred.'}`);
+    } finally{
         pubsubSubscribe.unsubscribe(uniqueId.toString())
     }
 })

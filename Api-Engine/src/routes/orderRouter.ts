@@ -26,9 +26,8 @@ orderRouter.post("/buy",authMiddleware,async(req:Request,res:Response)=>{
 
         const response = await responsePromise;
         res.status(200).send(response)
-    } catch (error) {
-        res.status(500).send(
-            "Failed to process the buy order. Please try again later")
+    } catch (error: any) { // Ensure TypeScript recognizes the error type
+        res.status(500).send(`Failed to process buy order: ${error.message || 'Unknown error occurred.'}`);
     } finally{
         pubsubSubscribe.unsubscribe(uniqueId.toString())
     }
@@ -54,9 +53,8 @@ orderRouter.post("/sell",authMiddleware,async(req:Request,res:Response)=>{
 
         const response = await responsePromise;
         res.status(200).send(response)
-    } catch (error) {
-        res.status(500).send(
-            "Failed to process the sell order. Please try again later")
+    } catch (error: any) { // Ensure TypeScript recognizes the error type
+        res.status(500).send(`Failed to process sell: ${error.message || 'Unknown error occurred.'}`);
     } finally{
         pubsubSubscribe.unsubscribe(uniqueId.toString())
     }
