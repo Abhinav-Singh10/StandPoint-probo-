@@ -364,8 +364,14 @@ async function processQueue() {
                     locked:0,
                   }
                 }
-              }
+            }
 
+            await pubsub.publish(
+                `${uniqueId}`,
+                JSON.stringify(STOCK_BALANCES[userId][stockSymbol])
+              );
+  
+              break;
           }
 
           default: {

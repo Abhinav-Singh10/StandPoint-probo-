@@ -6,7 +6,7 @@ export const checkAndLockFunds = async (
   quantity: number,
   price: number,
   orderType: "mint" | "buy" | "sell",
-  uniqueId:number
+  uniqueId:number,
 ) => {
   switch (orderType) {
     case "sell":
